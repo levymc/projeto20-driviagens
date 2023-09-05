@@ -1,14 +1,11 @@
 import PassengersRepository from "../repositories/passengers.repository.js";
 
 export default class PassengersController {
-    constructor() {
-        this.passengersRepository = new PassengersRepository()
-    }
 
-    handlePostPassenger(req, res) {
-        const newPassenger = req.body;
-        console.log("AUI")
-
-        console.log(newPassenger)
+    async handlePostPassenger(req, res) {
+        const passengersRepository = new PassengersRepository();
+        const insertedId = await passengersRepository.postPassengerDB(req.body.firstName, req.body.lastName)
+        console.log(insertedId)
+        if(insertedId) res.status(201).send(insertedId)
     }
 }
