@@ -1,4 +1,5 @@
 import { db } from "../database/db.connection.js";
+import httpStatus from "http-status";
 
 export default class PassengersRepository {
     async postPassengerDB(firstName, lastName) {
@@ -10,7 +11,7 @@ export default class PassengersRepository {
             const result = await db.query(query, values);
             return result.rows[0];
         } catch (error) {
-            error.status = 500
+            error.status = httpStatus.INTERNAL_SERVER_ERROR
             error.name = "SQLException PassengersRepository.postPassengerDB"
             throw error
         }
