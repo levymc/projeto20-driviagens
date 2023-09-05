@@ -1,4 +1,5 @@
 import { db } from "../database/db.connection.js";
+import httpStatus from "http-status";
 
 export default class PassengersRepository {
     async postPassengerDB(firstName, lastName) {
@@ -8,19 +9,11 @@ export default class PassengersRepository {
             const values = [firstName, lastName];
         try {
             const result = await db.query(query, values);
-            return result.rows;
+            return result.rows[0];
         } catch (error) {
-            console.error(error);
-            return false;
+            error.status = httpStatus.INTERNAL_SERVER_ERROR
+            error.name = "SQLException PassengersRepository.postPassengerDB"
+            throw error
         }
-    }
-
-        // if (typeof newPassenger === 'object' && newPassenger !== null) {
-        //     // this.passengers.push(newPassenger);
-
-        //     return { success: true, message: 'Passageiro adicionado com sucesso!' };
-        // } else {
-        //     return { success: false, message: 'Passageiro inválido. Deve ser um objeto válido.' };
-        // }
-    
+    }    
 }
