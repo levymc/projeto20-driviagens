@@ -13,14 +13,5 @@ export default class PassengersRepository {
             console.error(error);
             return false;
         }
-    }
-
-        // if (typeof newPassenger === 'object' && newPassenger !== null) {
-        //     // this.passengers.push(newPassenger);
-
-        //     return { success: true, message: 'Passageiro adicionado com sucesso!' };
-        // } else {
-        //     return { success: false, message: 'Passageiro inválido. Deve ser um objeto válido.' };
-        // }
-    
+    }    
 }
