@@ -5,13 +5,13 @@ export default class PassengersRepository {
         const query = `
             insert into public.passengers ("firstName", "lastName") values ($1, $2) returning id
         `;
-            const values = [firstName, lastName];
+            const values = [firstName];
         try {
             const result = await db.query(query, values);
             return result.rows;
         } catch (error) {
-            console.error(error);
-            return false;
+            // console.error(error);
+            throw new Error("SQLException PassengersRepository.postPassengerDB", error);
         }
     }    
 }
