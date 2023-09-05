@@ -8,7 +8,7 @@ const passengersRouter = Router();
 const controller = new PassengersController()
 const services = new PassengersServices()
 
-passengersRouter.post('/passengers', validateSchema(passengerSchema), services.handlePassengersRepository, controller.handlePostPassenger);
+passengersRouter.post('/passengers', validateSchema(passengerSchema), controller.handlePostPassenger);
 passengersRouter.get('/passengers/travels');
 
 export default passengersRouter;

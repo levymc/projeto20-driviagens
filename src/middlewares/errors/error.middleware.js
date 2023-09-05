@@ -1,11 +1,11 @@
 
-export function SQLException(err, req, res, next) {
-    console.error(`${err.name}  ${err.message}`);
+export function SQLException(err, req, res) {
+    // console.error(`${err.name}  ${err.message}`);
+    console.log("________________________________________________________________________________________")
     res.status(500).json({
-        type: err.name,
+        name: err.name,
         error: err.message,
     });
-    next(err);
-    
+    // next(err);
 }
 
