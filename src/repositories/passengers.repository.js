@@ -10,8 +10,9 @@ export default class PassengersRepository {
             const result = await db.query(query, values);
             return result.rows[0];
         } catch (error) {
+            error.status = 500
             error.name = "SQLException PassengersRepository.postPassengerDB"
-            throw Error(error)
+            throw error
         }
     }    
 }
