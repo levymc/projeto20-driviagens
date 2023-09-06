@@ -9,9 +9,9 @@ export default class CitiesController {
             res.insertedId = await services.handleCitiesRepository(req.body.name)
             if(res.insertedId) res.status(201).send(res.insertedId)
             else {
-                err.status = httpStatus.EXPECTATION_FAILED
+                err.status = 404
                 err.message = "Ocorreu algum erro"
-                throw new MyException(err, req, res, next)
+                next(err)
             }
         }catch (err) {
             next(err)

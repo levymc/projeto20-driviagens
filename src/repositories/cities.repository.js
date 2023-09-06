@@ -11,7 +11,7 @@ export default class CitiesRepository {
             const result = await db.query(query, values);
             return result.rows[0];
         } catch (error) {
-            error.status = httpStatus.INTERNAL_SERVER_ERROR
+            error.status = error.code === "42P02" ? httpStatus.INTERNAL_SERVER_ERROR : httpStatus.CONFLICT
             error.name = "SQLException CitiesRepository.postCityDB"
             throw error
         }
