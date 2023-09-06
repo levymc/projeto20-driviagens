@@ -14,11 +14,11 @@ export default class FlightsRepository {
         } catch (error) {
             switch(error.code){
                 case '08P01':
-                    throw new AppError(error, 'SQLException PassengersRepository.postPassengerDB', httpStatus.INTERNAL_SERVER_ERROR)
+                    throw new AppError(error.detail, 'SQLException PassengersRepository.postPassengerDB', httpStatus.INTERNAL_SERVER_ERROR)
                 case '23503':
-                    throw new AppError(error, `'origin' e 'destination' devem existir na tabela 'cities`, httpStatus.NOT_FOUND)
+                    throw new AppError(error.detail, `'origin' e 'destination' devem existir na tabela 'cities`, httpStatus.NOT_FOUND)
                 default:
-                    throw new AppError(error, "defaultError", httpStatus.INTERNAL_SERVER_ERROR)
+                    throw new AppError(error.detail, "defaultError", httpStatus.INTERNAL_SERVER_ERROR)
             }
         }
     }    
