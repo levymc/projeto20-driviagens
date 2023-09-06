@@ -4,6 +4,6 @@ const Joi = JoiImport.extend(DateExtension);
 
 export const flightsSchema = Joi.object({
     origin: Joi.number().required(),
-    lastName: Joi.number().required(),
-    date: Joi.date().format('dd-mm-yyyy').utc(),
+    destination: Joi.number().required(),
+    date: Joi.date().format('DD-MM-YYYY').utc(),
 });
