@@ -1,10 +1,9 @@
-import Joi from 'joi';
-import JoiDate from '@joi/date';
+import DateExtension from '@joi/date';
+import JoiImport from 'joi';
+const Joi = JoiImport.extend(DateExtension);
 
-const JoiExtended = Joi.extend(JoiDate);
-
-export const flightsSchema = JoiExtended.object({
+export const flightsSchema = Joi.object({
     origin: Joi.number().required(),
     lastName: Joi.number().required(),
-    date: Joi.date().format('DD-MM-YYYY').utc(),
+    date: Joi.date().format('dd-mm-yyyy').utc(),
 });
