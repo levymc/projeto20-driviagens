@@ -2,10 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import router from "./routes/index.routes.js";
-import dailyReset from "./utils/dailyreset.js";
 import { MyException } from "./middlewares/errors/error.middleware.js";
 
-//import { startActivityMonitoring } from "./repositories/activity.monitor.js";
 
 dotenv.config()
 
@@ -15,7 +13,6 @@ app.use(express.json())
 app.use(router)
 app.use(MyException)
 
-dailyReset()
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
