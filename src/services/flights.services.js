@@ -10,9 +10,16 @@ export default class FlightsServices {
         this.flightsRepository = new FlightsRepository();
     }
 
-    async handleGetFlightsRepository(originName = null, destinationName = null){
-        const data = await this.flightsRepository.getFlights(originName, destinationName)
+    async handleGetFlightsRepository(originName = null, destinationName = null, biggerDate = null, smallerDate = null){
+        await this.checkBiggerAndSmallerDate(biggerDate, smallerDate)
+        const data = await this.flightsRepository.getFlights(originName, destinationName, biggerDate, smallerDate)
         return data
+    }
+
+    async checkBiggerAndSmallerDate(biggerDate, smallerDate){
+        if ((biggerDate === null && smallerDate != null) || (biggerDate != null && smallerDate === null) ) {
+            throw new AppError(`para bucar por período, a data inicial e final devem ser inseritdas`, 'bigger-date, smaller-date error', httpStatus.UNPROCESSABLE_ENTITY)
+        }
     }
 
     async handleFlightsRepository(origin, destination, date) {
