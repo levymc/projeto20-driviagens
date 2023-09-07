@@ -9,6 +9,12 @@ export default class FlightsServices {
     constructor() {
         this.flightsRepository = new FlightsRepository();
     }
+
+    async handleGetFlightsRepository(originName = null, destinationName = null){
+        const data = await this.flightsRepository.getFlights(originName, destinationName)
+        return data
+    }
+
     async handleFlightsRepository(origin, destination, date) {
         this.checkOriginAndDestination(origin, destination)
         this.checkDate(date)
