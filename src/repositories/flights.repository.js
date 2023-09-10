@@ -57,15 +57,9 @@ export default class FlightsRepository {
       
         query += ' ORDER BY date ';
         const result = await db.query(query, queryParams);
-        
-        if ( (biggerDate != null && smallerDate != null) && result.rowCount ===0 ){
-            throw new AppError('Período de dias não encontrado', 'SQLException getFlights - smaller-date e bigger-date', httpStatus.NOT_FOUND);
-        } else if (destinationName && result.rowCount === 0) {
+        if (destinationName && result.rowCount === 0) {
             throw new AppError('Destino escolhido não encontrado', 'SQLException getFlights', httpStatus.NOT_FOUND);
-        }
-
-        
-      
+        }      
         return result.rows;
       }
       
