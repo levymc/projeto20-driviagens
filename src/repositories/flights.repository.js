@@ -24,44 +24,47 @@ export default class FlightsRepository {
     }    
 
     async getFlights(originName, destinationName, biggerDate, smallerDate) {
+        let count = 1;
+
         let query = `
-            select * FROM public.flights
+            select * FROM public.flights where true
         `
         const queryParams = []
       
-        if (originName && destinationName) {
+        if (originName) {
             query += `
-                WHERE origin = (SELECT id FROM public.cities WHERE name ILIKE $1)
-                AND destination = (SELECT id FROM public.cities WHERE name ILIKE $2)
+                AND origin = (SELECT id FROM public.cities WHERE name = $${count})
             `;
-            queryParams.push(`%${originName}%`, `%${destinationName}%`);
-        } else if (originName) {
+            queryParams.push(`${originName}`);
+            count ++
+        } 
+        
+        if (destinationName) {
             query += `
-                WHERE origin = (SELECT id FROM public.cities WHERE name ILIKE $1)
+                AND destination = (SELECT id FROM public.cities WHERE name = $${count})
             `;
-            queryParams.push(`%${originName}%`);
-        } else if (destinationName) {
-            query += `
-                WHERE destination = (SELECT id FROM public.cities WHERE name ILIKE $1)
-            `;
-            queryParams.push(`%${destinationName}%`);
+            queryParams.push(`${destinationName}`);
+            count ++
         }
       
         if (biggerDate && smallerDate) {
             query += `
-                AND date >= $3
-                AND date <= $4
+                AND date <= $${count}
+                AND date >= $${count + 1}
             `;
             queryParams.push(biggerDate, smallerDate);
         }
       
         query += ' ORDER BY date ';
-      
         const result = await db.query(query, queryParams);
-      
-        if (destinationName && result.rowCount === 0) {
-          throw new AppError('Destino escolhido não encontrado', 'SQLException getFlights', httpStatus.NOT_FOUND);
-        }else if (biggerDate)
+        
+        if ( (biggerDate != null && smallerDate != null) && result.rowCount ===0 ){
+            throw new AppError('Período de dias não encontrado', 'SQLException getFlights - smaller-date e bigger-date', httpStatus.NOT_FOUND);
+        } else if (destinationName && result.rowCount === 0) {
+            throw new AppError('Destino escolhido não encontrado', 'SQLException getFlights', httpStatus.NOT_FOUND);
+        }
+
+        
       
         return result.rows;
       }
