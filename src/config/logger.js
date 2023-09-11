@@ -9,9 +9,9 @@ dotenv.config();
 
 const LOGGER = process.env.LOGGER ?? 'pino';
 
-type LoggerType = winston.Logger | bunyan | PinoLogger;
+// type LoggerType = winston.Logger | bunyan | PinoLogger;
 
-function createLogger(loggerName: string): LoggerType {
+function createLogger(loggerName){
   switch (loggerName) {
     case 'winston':
       return winston.createLogger({
@@ -33,7 +33,7 @@ function createLogger(loggerName: string): LoggerType {
           level: (label) => {
             return { level: label.toUpperCase() };
           },
-          msg: (msg: string) => ({ msg }),
+          msg: (msg) => ({ msg }),
         },
       });
     default:
