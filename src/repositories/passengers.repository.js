@@ -17,18 +17,31 @@ export default class PassengersRepository {
         }
     }    
 
-    async getPassengersTravels(){
-        const query = `
+    async getPassengersTravels(page, name){
+        let count = 1
+        let query = `
             SELECT CONCAT(pass."firstName", ' ', pass."lastName") AS passenger,
             COUNT(tra."passengerId") AS travels
             FROM public.passengers AS pass
             LEFT JOIN public.travels AS tra ON pass.id = tra."passengerId"
+        `;
+        const queryParams = []
+    
+        if (name) {
+            query += `WHERE pass."firstName" || ' ' || pass."lastName" ILIKE '%' || $${count} || '%' `;
+            queryParams.push(`${name}`)
+            count ++
+        }
+        
+        query += `
             GROUP BY passenger
             ORDER BY travels DESC
-        `
+            OFFSET $${count}; 
+        `;
+        queryParams.push(page * 10)
         try {
-            const result = await db.query(query);
-            return result.rows
+            const result = await db.query(query, queryParams);
+            return { responseDB: result.rows, rowCount: result.rowCount }
         } catch (error) {
             error.status = httpStatus.INTERNAL_SERVER_ERROR
             error.name = "SQLException PassengersRepository.getPassengersTravels"

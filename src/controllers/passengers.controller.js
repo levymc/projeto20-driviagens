@@ -12,9 +12,11 @@ export default class PassengersController {
     }
 
     async passengersTravels(req, res, next){
+        const page = req.query.page ? parseInt(req.query.page) : 0
+        const name = req.query.name ? req.query.name : null
         const services = new PassengersServices()
         try{
-            const passengersTravelsList = await services.handlePassangersTravels()
+            const passengersTravelsList = await services.handlePassangersTravels(page, name)
             res.status(201).send(passengersTravelsList)
         }catch (err) {
             next(err)
