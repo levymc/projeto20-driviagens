@@ -6,4 +6,10 @@ export default class PassengersServices {
         const responseDB = await passengersRepository.postPassengerDB(firstName, lastName)
         return responseDB
     }    
+
+    async handlePassangersTravels(){
+        const passengersRepository = new PassengersRepository();
+        const responseDB = await passengersRepository.getPassengersTravels()
+        return responseDB
+    }
 }

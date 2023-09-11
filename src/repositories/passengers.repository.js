@@ -16,4 +16,23 @@ export default class PassengersRepository {
             throw error
         }
     }    
+
+    async getPassengersTravels(){
+        const query = `
+            SELECT CONCAT(pass."firstName", ' ', pass."lastName") AS passenger,
+            COUNT(tra."passengerId") AS travels
+            FROM public.passengers AS pass
+            LEFT JOIN public.travels AS tra ON pass.id = tra."passengerId"
+            GROUP BY passenger
+            ORDER BY travels DESC
+        `
+        try {
+            const result = await db.query(query);
+            return result.rows
+        } catch (error) {
+            error.status = httpStatus.INTERNAL_SERVER_ERROR
+            error.name = "SQLException PassengersRepository.getPassengersTravels"
+            throw error
+        }
+    }
 }
