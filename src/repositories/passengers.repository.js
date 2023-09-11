@@ -1,5 +1,6 @@
 import { db } from "../database/db.connection.js";
 import httpStatus from "http-status";
+import AppError from "../middlewares/errors/AppError.js";
 
 export default class PassengersRepository {
     async postPassengerDB(firstName, lastName) {
@@ -11,9 +12,7 @@ export default class PassengersRepository {
             const result = await db.query(query, values);
             return result.rows[0];
         } catch (error) {
-            error.status = httpStatus.INTERNAL_SERVER_ERROR
-            error.name = "SQLException PassengersRepository.postPassengerDB"
-            throw error
+            throw AppError('SQLException PassengersRepository.postPassengerDB', error, httpStatus.BAD_REQUEST)
         }
     }    
 
@@ -43,9 +42,7 @@ export default class PassengersRepository {
             const result = await db.query(query, queryParams);
             return { responseDB: result.rows, rowCount: result.rowCount }
         } catch (error) {
-            error.status = httpStatus.INTERNAL_SERVER_ERROR
-            error.name = "SQLException PassengersRepository.getPassengersTravels"
-            throw error
+            throw AppError('SQLException PassengersRepository.getPassengersTravels', error, httpStatus.BAD_REQUEST)
         }
     }
 }
