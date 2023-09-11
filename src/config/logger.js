@@ -1,8 +1,8 @@
 import winston from 'winston';
 import bunyan from 'bunyan';
-import pino, { Logger as PinoLogger } from 'pino';
+import pino from 'pino';
 import dotenv from 'dotenv';
-import AppError from '../middlewares/errors/AppError';
+import AppError from '../middlewares/errors/AppError.js';
 import httpStatus from 'http-status';
 
 dotenv.config();
