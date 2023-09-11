@@ -18,8 +18,12 @@
   },
   "dependencies": {
     "@joi/date": "^2.1.0",
+    "@types/bunyan": "^1.8.8",
+    "@types/pino": "^7.0.5",
+    "@types/winston": "^2.4.4",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.1",
+    "bunyan": "^1.8.15",
     "cheerio": "1.0.0-rc.12",
     "cors": "^2.8.5",
     "dayjs": "^1.11.9",
@@ -31,7 +35,9 @@
     "nanoid": "^4.0.2",
     "node-schedule": "^2.1.1",
     "pg": "^8.11.3",
+    "pino": "^8.15.1",
     "url-metadata": "^3.0.2",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "winston": "^3.10.0"
   }
 }
