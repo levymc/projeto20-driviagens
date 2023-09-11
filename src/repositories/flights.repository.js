@@ -23,20 +23,44 @@ export default class FlightsRepository {
         }
     }    
 
-    async getFlights(originName, destinationName){
+    async getFlights(originName, destinationName, biggerDate, smallerDate) {
+        let count = 1;
+
         let query = `
-            select * from public.flights
-        `;
-
-        if (originName && destinationName) query += ` where origin = (select id from public.cities where name ilike '%${originName}%')
-                                                and destination = (select id from public.cities where name ilike '%${destinationName}%') `
-        if (originName && destinationName === null) query += ` where origin = (select id from public.cities where name ilike '%${originName}%') `
-        if (destinationName && originName === null) query += ` where destination = (select id from public.cities where name ilike '%${destinationName}%') `
-
-        query += ' order by date '
-        const result = await db.query(query);
-        if (destinationName && result.rowCount === 0) throw new AppError('destino escolhido não encontrado', 'SQLException getFlights', httpStatus.NOT_FOUND)
+            select * FROM public.flights where true
+        `
+        const queryParams = []
+      
+        if (originName) {
+            query += `
+                AND origin = (SELECT id FROM public.cities WHERE name = $${count})
+            `;
+            queryParams.push(`${originName}`);
+            count ++
+        } 
+        
+        if (destinationName) {
+            query += `
+                AND destination = (SELECT id FROM public.cities WHERE name = $${count})
+            `;
+            queryParams.push(`${destinationName}`);
+            count ++
+        }
+      
+        if (biggerDate && smallerDate) {
+            query += `
+                AND date <= $${count}
+                AND date >= $${count + 1}
+            `;
+            queryParams.push(biggerDate, smallerDate);
+        }
+      
+        query += ' ORDER BY date ';
+        const result = await db.query(query, queryParams);
+        if (destinationName && result.rowCount === 0) {
+            throw new AppError('Destino escolhido não encontrado', 'SQLException getFlights', httpStatus.NOT_FOUND);
+        }      
         return result.rows;
-
-    }
+      }
+      
 }
