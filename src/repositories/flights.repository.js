@@ -25,28 +25,32 @@ export default class FlightsRepository {
 
     async getFlights(originName, destinationName, biggerDate, smallerDate) {
         let count = 1;
-
+    
         let query = `
-            select * FROM public.flights where true
-        `
+            SELECT fli.id, "originCity".name as origin, "destCity".name as destination, TO_CHAR(fli.date, 'DD-MM-YYYY') AS date
+            FROM public.flights as fli
+            LEFT JOIN public.cities as "originCity" ON "originCity".id = fli.origin
+            LEFT JOIN public.cities as "destCity" ON "destCity".id = fli.destination
+            WHERE true
+        `;
         const queryParams = []
-      
+    
         if (originName) {
             query += `
-                AND origin = (SELECT id FROM public.cities WHERE name = $${count})
+                AND fli.origin = (SELECT id FROM public.cities WHERE name = $${count})
             `;
             queryParams.push(`${originName}`);
-            count ++
-        } 
-        
+            count++
+        }
+    
         if (destinationName) {
             query += `
-                AND destination = (SELECT id FROM public.cities WHERE name = $${count})
+                AND fli.destination = (SELECT id FROM public.cities WHERE name = $${count})
             `;
             queryParams.push(`${destinationName}`);
-            count ++
+            count++
         }
-      
+    
         if (biggerDate && smallerDate) {
             query += `
                 AND date <= $${count}
@@ -54,13 +58,12 @@ export default class FlightsRepository {
             `;
             queryParams.push(biggerDate, smallerDate);
         }
-      
+    
         query += ' ORDER BY date ';
         const result = await db.query(query, queryParams);
         if (destinationName && result.rowCount === 0) {
             throw new AppError('Destino escolhido não encontrado', 'SQLException getFlights', httpStatus.NOT_FOUND);
-        }      
+        }
         return result.rows;
-      }
-      
+    }     
 }

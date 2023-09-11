@@ -7,6 +7,6 @@ const passengersRouter = Router();
 const controller = new PassengersController()
 
 passengersRouter.post('/passengers', validateSchema(passengerSchema), controller.handlePostPassenger);
-passengersRouter.get('/passengers/travels');
+passengersRouter.get('/passengers/travels', controller.passengersTravels);
 
 export default passengersRouter;
